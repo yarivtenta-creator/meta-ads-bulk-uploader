@@ -1,0 +1,29 @@
+modules = ["nodejs-22"]
+
+[nix]
+channel = "stable-24_05"
+
+[deployment]
+deploymentTarget = "cloudrun"
+build = ["sh", "-c", "npm run build"]
+run = ["sh", "-c", "npm run start -- -p 3000"]
+
+[[ports]]
+localPort = 3000
+externalPort = 80
+
+[[ports]]
+localPort = 5000
+externalPort = 3000
+
+[workflows]
+runButton = "dev"
+
+[[workflows.workflow]]
+name = "dev"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm run dev -- --port 5000"
+waitForPort = 5000
